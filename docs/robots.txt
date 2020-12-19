@@ -1,1 +1,1 @@
-Sitemap: http://github.com/b1ackshadow/b1ackshadow.github.io/sitemap.xml
+Sitemap: https://b1ackshadow.github.io/sitemap.xml
