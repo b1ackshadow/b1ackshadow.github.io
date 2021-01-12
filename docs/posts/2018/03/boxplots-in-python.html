@@ -1,0 +1,985 @@
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+
+<meta charset="utf-8">
+
+
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Boxplots in python - blackshadow</title>
+
+
+
+
+
+
+
+<meta property="og:locale" content="en-US">
+<meta property="og:site_name" content="blackshadow">
+<meta property="og:title" content="Boxplots in python">
+
+
+  <link rel="canonical" href="http://127.0.0.1:4000/posts/2018/03/boxplots-in-python">
+  <meta property="og:url" content="http://127.0.0.1:4000/posts/2018/03/boxplots-in-python">
+
+
+
+  <meta property="og:description" content="To celebrate figuring out how to blog with jupyter notebooks, I’m going to go through some tricks I’ve learned to plot pretty boxplots in Python.">
+
+
+
+
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2018-03-08T00:00:00+00:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "DC",
+      "url" : "http://127.0.0.1:4000",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link href="http://127.0.0.1:4000/feed.xml" type="application/atom+xml" rel="alternate" title="blackshadow Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="http://127.0.0.1:4000/assets/css/main.css">
+
+<meta http-equiv="cleartype" content="on">
+    
+
+<!-- start custom head snippets -->
+
+<link rel="apple-touch-icon" sizes="57x57" href="http://127.0.0.1:4000/images/apple-touch-icon-57x57.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="60x60" href="http://127.0.0.1:4000/images/apple-touch-icon-60x60.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="72x72" href="http://127.0.0.1:4000/images/apple-touch-icon-72x72.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="76x76" href="http://127.0.0.1:4000/images/apple-touch-icon-76x76.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="114x114" href="http://127.0.0.1:4000/images/apple-touch-icon-114x114.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="120x120" href="http://127.0.0.1:4000/images/apple-touch-icon-120x120.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="144x144" href="http://127.0.0.1:4000/images/apple-touch-icon-144x144.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="152x152" href="http://127.0.0.1:4000/images/apple-touch-icon-152x152.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="180x180" href="http://127.0.0.1:4000/images/apple-touch-icon-180x180.png?v=M44lzPylqQ">
+<link rel="icon" type="image/png" href="http://127.0.0.1:4000/images/favicon-32x32.png?v=M44lzPylqQ" sizes="32x32">
+<link rel="icon" type="image/png" href="http://127.0.0.1:4000/images/android-chrome-192x192.png?v=M44lzPylqQ" sizes="192x192">
+<link rel="icon" type="image/png" href="http://127.0.0.1:4000/images/favicon-96x96.png?v=M44lzPylqQ" sizes="96x96">
+<link rel="icon" type="image/png" href="http://127.0.0.1:4000/images/favicon-16x16.png?v=M44lzPylqQ" sizes="16x16">
+<link rel="manifest" href="http://127.0.0.1:4000/images/manifest.json?v=M44lzPylqQ">
+<link rel="mask-icon" href="http://127.0.0.1:4000/images/safari-pinned-tab.svg?v=M44lzPylqQ" color="#000000">
+<link rel="shortcut icon" href="/images/favicon.ico?v=M44lzPylqQ">
+<meta name="msapplication-TileColor" content="#000000">
+<meta name="msapplication-TileImage" content="http://127.0.0.1:4000/images/mstile-144x144.png?v=M44lzPylqQ">
+<meta name="msapplication-config" content="http://127.0.0.1:4000/images/browserconfig.xml?v=M44lzPylqQ">
+<meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" href="http://127.0.0.1:4000/assets/css/academicons.css"/>
+
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+
+<!-- end custom head snippets -->
+
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <button><div class="navicon"></div></button>
+        <ul class="visible-links">
+          <li class="masthead__menu-item masthead__menu-item--lg"><a href="http://127.0.0.1:4000/">blackshadow</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://127.0.0.1:4000/portfolio/">Portfolio</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://127.0.0.1:4000/year-archive/">Blog Posts</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://127.0.0.1:4000/cv/">CV</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="http://127.0.0.1:4000/markdown/">Guide</a></li>
+          
+        </ul>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <div class="sidebar sticky">
+  
+
+
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  <div class="author__avatar">
+    
+    	<img src="http://127.0.0.1:4000/images/mew.png" class="author__avatar" alt="">
+    
+  </div>
+
+  <div class="author__content">
+    <h3 class="author__name"></h3>
+    <p class="author__bio"></p>
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> Your mom's attic</li>
+      
+      
+      
+      
+        <li><a href="mailto:actuallydc@gmail.com"><i class="fas fa-fw fa-envelope" aria-hidden="true"></i> Email</a></li>
+      
+      
+       
+      
+      
+      
+      
+      
+      
+      
+      
+      
+        <li><a href="https://github.com/b1ackshadow"><i class="fab fa-fw fa-github" aria-hidden="true"></i> Github</a></li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+	  <meta itemprop="headline" content="Boxplots in python">
+    <meta itemprop="description" content="To celebrate figuring out how to blog with jupyter notebooks, I’m going to go through some tricks I’ve learned to plot pretty boxplots in Python.">
+    <meta itemprop="datePublished" content="March 08, 2018">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Boxplots in python
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  8 minute read
+	
+</p>
+          
+        
+        
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2018-03-08T00:00:00+00:00">March 08, 2018</time></p>
+        
+        
+             
+        
+    
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        <p>To celebrate figuring out <a href="/posts/2018/03/ipython-notebooks-jekyll">how to blog with jupyter notebooks</a>, I’m going to go through some tricks I’ve learned to plot pretty boxplots in Python.</p>
+
+<h1 id="boxplots">Boxplots</h1>
+
+<p>Boxplots are my absolute favorite way to look at data, but the defaults in Python aren’t publication-level pretty. When making boxplots, I think it’s very important to also plot the underlying raw data points whenever that’s possible. Especially for main text figures and/or in cases without that many points, this is the best way to simultaneously summarize the data and allow the reader to come to their interpretations of it. When I read a paper, I get fairly grumpy when I know that the sample size is low (say, less than 100) but I only get to see the boxplot. Just let me see the data - otherwise, I have to wonder if you’re trying to hide something…</p>
+
+<p>Anyway. In this post, we’ll be using <code class="language-plaintext highlighter-rouge">seaborn</code> to establish the main boxplots, with some additional tweaking to make them beautiful. Of course, I didn’t come up with these solutions all on my own, and deep gratitude goes to Stack Overflow for teaching me these tricks (in addition to almost everything else I know about coding). Unfortunately, I’ve been making these plots long enough that I go back and reference my own previous code, so I’ve lost links back to the most useful StackOverflow posts that have helped me along… :(</p>
+
+<h1 id="generate-data">Generate data</h1>
+
+<p>First, let’s set up some toy data. Here, we’ll be simulating making some measurements on three different body sites for 15 healthy patients and 10 diseased patients.</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">"</span><span class="s2">hey)
+</span></code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="n">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+
+<span class="c1"># Set up the data
+</span><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">concatenate</span><span class="p">(</span>
+    <span class="p">[[</span><span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">15</span><span class="p">),</span> <span class="mi">15</span><span class="o">*</span><span class="p">[</span><span class="s">'site1'</span><span class="p">],</span> <span class="mi">15</span><span class="o">*</span><span class="p">[</span><span class="s">'healthy'</span><span class="p">]],</span>
+     <span class="p">[</span><span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">15</span><span class="p">),</span> <span class="mi">15</span><span class="o">*</span><span class="p">[</span><span class="s">'site2'</span><span class="p">],</span> <span class="mi">15</span><span class="o">*</span><span class="p">[</span><span class="s">'healthy'</span><span class="p">]],</span>
+     <span class="p">[</span><span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">15</span><span class="p">),</span> <span class="mi">15</span><span class="o">*</span><span class="p">[</span><span class="s">'site3'</span><span class="p">],</span> <span class="mi">15</span><span class="o">*</span><span class="p">[</span><span class="s">'healthy'</span><span class="p">]],</span>
+     <span class="p">[</span><span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span> <span class="mi">10</span><span class="o">*</span><span class="p">[</span><span class="s">'site1'</span><span class="p">],</span> <span class="mi">10</span><span class="o">*</span><span class="p">[</span><span class="s">'disease'</span><span class="p">]],</span>
+     <span class="p">[</span><span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span> <span class="mi">10</span><span class="o">*</span><span class="p">[</span><span class="s">'site2'</span><span class="p">],</span> <span class="mi">10</span><span class="o">*</span><span class="p">[</span><span class="s">'disease'</span><span class="p">]],</span>
+     <span class="p">[</span><span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">),</span> <span class="mi">10</span><span class="o">*</span><span class="p">[</span><span class="s">'site3'</span><span class="p">],</span> <span class="mi">10</span><span class="o">*</span><span class="p">[</span><span class="s">'disease'</span><span class="p">]]],</span>
+    <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="p">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s">'value'</span><span class="p">,</span> <span class="s">'site'</span><span class="p">,</span> <span class="s">'label'</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">.</span><span class="n">T</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s">'value'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s">'value'</span><span class="p">].</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+
+<span class="c1"># Show every ninth row
+</span><span class="n">df</span><span class="p">.</span><span class="n">iloc</span><span class="p">[::</span><span class="mi">9</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div>
+<style scoped="">
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>value</th>
+      <th>site</th>
+      <th>label</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2.591935</td>
+      <td>site1</td>
+      <td>healthy</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>1.823141</td>
+      <td>site1</td>
+      <td>healthy</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>2.876044</td>
+      <td>site2</td>
+      <td>healthy</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>5.003611</td>
+      <td>site2</td>
+      <td>healthy</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>-1.586702</td>
+      <td>site3</td>
+      <td>healthy</td>
+    </tr>
+    <tr>
+      <th>45</th>
+      <td>0.675445</td>
+      <td>site1</td>
+      <td>disease</td>
+    </tr>
+    <tr>
+      <th>54</th>
+      <td>0.460209</td>
+      <td>site1</td>
+      <td>disease</td>
+    </tr>
+    <tr>
+      <th>63</th>
+      <td>1.158567</td>
+      <td>site2</td>
+      <td>disease</td>
+    </tr>
+    <tr>
+      <th>72</th>
+      <td>1.226395</td>
+      <td>site3</td>
+      <td>disease</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h1 id="default-boxplot-with-seaborn">Default boxplot with seaborn</h1>
+
+<p>The default seaborn plot isn’t bad, but it also isn’t great. I typically use a call to <code class="language-plaintext highlighter-rouge">boxplot</code> first and then <code class="language-plaintext highlighter-rouge">stripplot</code> to show the raw data. Note that doing this makes the legend wonky - I usually fix this afterwards (or, more often than not, deal with the legend separately).</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="n">plt</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="n">sns</span>
+<span class="o">%</span><span class="n">matplotlib</span> <span class="n">inline</span>
+
+<span class="n">sns</span><span class="p">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'site'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'value'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s">'label'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">)</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">stripplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'site'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'value'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s">'label'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+              <span class="n">jitter</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s">'upper left'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;matplotlib.legend.Legend at 0x1106afb50&gt;
+</code></pre></div></div>
+
+<p><img src="/images/2018-03-09-boxplots-in-python_files/2018-03-09-boxplots-in-python_4_1.png" alt="png" /></p>
+
+<p>The easiest way to improve these plots is to (1) change the seaborn style to <code class="language-plaintext highlighter-rouge">'white'</code> and (2) pass in a color palette that you like. Also note that when you plot both a boxplot and the raw points, you should tell seaborn not to plot any of the outliers with <code class="language-plaintext highlighter-rouge">fliersize=0</code>, otherwise you’ll have double-points for these.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">sns</span><span class="p">.</span><span class="n">set_style</span><span class="p">(</span><span class="s">'white'</span><span class="p">)</span>
+
+<span class="n">pal</span> <span class="o">=</span> <span class="n">sns</span><span class="p">.</span><span class="n">color_palette</span><span class="p">(</span><span class="s">'Paired'</span><span class="p">)</span>
+
+<span class="n">sns</span><span class="p">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'site'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'value'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s">'label'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">palette</span><span class="o">=</span><span class="n">pal</span><span class="p">,</span> <span class="n">fliersize</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">stripplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'site'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'value'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s">'label'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">jitter</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">pal</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s">'upper left'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;matplotlib.legend.Legend at 0x110a8e650&gt;
+</code></pre></div></div>
+
+<p><img src="/images/2018-03-09-boxplots-in-python_files/2018-03-09-boxplots-in-python_6_1.png" alt="png" /></p>
+
+<p>Alternatively, you can explicitly specify the colors you want for each hue value.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pal</span> <span class="o">=</span> <span class="p">{</span><span class="s">'healthy'</span><span class="p">:</span> <span class="s">'green'</span><span class="p">,</span> <span class="s">'disease'</span><span class="p">:</span> <span class="s">'blue'</span><span class="p">}</span>
+
+<span class="n">sns</span><span class="p">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'site'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'value'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s">'label'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">palette</span><span class="o">=</span><span class="n">pal</span><span class="p">,</span> <span class="n">fliersize</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">stripplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'site'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'value'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s">'label'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
+    <span class="n">jitter</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">palette</span><span class="o">=</span><span class="n">pal</span><span class="p">)</span>
+<span class="n">plt</span><span class="p">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s">'upper left'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;matplotlib.legend.Legend at 0x110e52550&gt;
+</code></pre></div></div>
+
+<p><img src="/images/2018-03-09-boxplots-in-python_files/2018-03-09-boxplots-in-python_8_1.png" alt="png" /></p>
+
+<h1 id="more-modifications">More modifications</h1>
+
+<p>While convenient, this is also not beautiful enough to be publication-worthy. If we want to make really nice boxplots, we’ll have to roll up our sleeves and get more into the details.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># When you start digging into the parameters, it's a good idea
+# to explicitly initialize the figure and get the figure and
+# axes handles
+</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplots</span><span class="p">()</span>
+
+<span class="c1"># First, we'll pick some nicer colors for the healthy and disease.
+# I got these colors by tweaking some colors from the Set1 palette
+# in powerpoint, and then grabbing the hex code from Powerpoint.
+</span><span class="n">dark_brown</span> <span class="o">=</span> <span class="s">'#B25116'</span>
+<span class="n">dark_pink</span> <span class="o">=</span> <span class="s">'#FB84D1'</span>
+<span class="n">pal</span> <span class="o">=</span> <span class="p">{</span><span class="s">'healthy'</span><span class="p">:</span> <span class="n">dark_brown</span><span class="p">,</span> <span class="s">'disease'</span><span class="p">:</span> <span class="n">dark_pink</span><span class="p">}</span>
+
+<span class="c1"># Here, we set up some properties for the boxplot parts. I definitely
+# stole this from Stack Overflow, but I can't find the original post
+# right now.
+</span><span class="n">boxprops</span> <span class="o">=</span> <span class="p">{</span><span class="s">'edgecolor'</span><span class="p">:</span> <span class="s">'k'</span><span class="p">,</span> <span class="s">'linewidth'</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s">'facecolor'</span><span class="p">:</span> <span class="s">'w'</span><span class="p">}</span>
+<span class="n">lineprops</span> <span class="o">=</span> <span class="p">{</span><span class="s">'color'</span><span class="p">:</span> <span class="s">'k'</span><span class="p">,</span> <span class="s">'linewidth'</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+
+<span class="c1"># Set up some general kwargs that we'll use in both the stripplot and boxplot
+# Note that you can change the order of hue variables here.
+</span><span class="n">kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s">'palette'</span><span class="p">:</span> <span class="n">pal</span><span class="p">,</span> <span class="s">'hue_order'</span><span class="p">:</span> <span class="p">[</span><span class="s">'disease'</span><span class="p">,</span> <span class="s">'healthy'</span><span class="p">]}</span>
+
+<span class="c1"># The boxplot kwargs get passed to matplotlib's boxplot function.
+# Note how we can re-use our lineprops dict to make sure all the lines
+# match. You could also edit each line type (e.g. whiskers, caps, etc)
+# separately.
+</span><span class="n">boxplot_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">({</span><span class="s">'boxprops'</span><span class="p">:</span> <span class="n">boxprops</span><span class="p">,</span> <span class="s">'medianprops'</span><span class="p">:</span> <span class="n">lineprops</span><span class="p">,</span>
+                       <span class="s">'whiskerprops'</span><span class="p">:</span> <span class="n">lineprops</span><span class="p">,</span> <span class="s">'capprops'</span><span class="p">:</span> <span class="n">lineprops</span><span class="p">,</span>
+                       <span class="s">'width'</span><span class="p">:</span> <span class="mf">0.75</span><span class="p">},</span>
+                      <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="n">stripplot_kwargs</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">({</span><span class="s">'linewidth'</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span> <span class="s">'size'</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s">'alpha'</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">},</span>
+                        <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<span class="c1"># And we can plot just like last time
+</span><span class="n">sns</span><span class="p">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'site'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'value'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s">'label'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">fliersize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">boxplot_kwargs</span><span class="p">)</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">stripplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'site'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'value'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s">'label'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">split</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">jitter</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="o">**</span><span class="n">stripplot_kwargs</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">.</span><span class="n">legend_</span><span class="p">.</span><span class="n">remove</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="/images/2018-03-09-boxplots-in-python_files/2018-03-09-boxplots-in-python_10_0.png" alt="png" /></p>
+
+<p>If we want, we can also play with the facecolors. We can also do this with a normal call through the <code class="language-plaintext highlighter-rouge">palette</code> keyword in the seaborn function:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">pal</span> <span class="o">=</span> <span class="p">{</span><span class="s">'healthy'</span><span class="p">:</span> <span class="n">dark_brown</span><span class="p">,</span> <span class="s">'disease'</span><span class="p">:</span> <span class="n">dark_pink</span><span class="p">}</span>
+
+<span class="c1"># Set up another palette for the boxplots, with slightly lighter shades
+</span><span class="n">light_pink</span> <span class="o">=</span> <span class="s">'#FFC9EC'</span>
+<span class="n">light_brown</span> <span class="o">=</span> <span class="s">'#E5B699'</span>
+<span class="n">face_pal</span> <span class="o">=</span> <span class="p">{</span><span class="s">'healthy'</span><span class="p">:</span> <span class="n">light_brown</span><span class="p">,</span> <span class="s">'disease'</span><span class="p">:</span> <span class="n">light_pink</span><span class="p">}</span>
+
+<span class="n">hue_order</span> <span class="o">=</span> <span class="p">[</span><span class="s">'disease'</span><span class="p">,</span> <span class="s">'healthy'</span><span class="p">]</span>
+
+<span class="c1"># Make sure to remove the 'facecolor': 'w' property here, otherwise
+# the palette gets overrided
+</span><span class="n">boxprops</span> <span class="o">=</span> <span class="p">{</span><span class="s">'edgecolor'</span><span class="p">:</span> <span class="s">'k'</span><span class="p">,</span> <span class="s">'linewidth'</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+<span class="n">lineprops</span> <span class="o">=</span> <span class="p">{</span><span class="s">'color'</span><span class="p">:</span> <span class="s">'k'</span><span class="p">,</span> <span class="s">'linewidth'</span><span class="p">:</span> <span class="mi">2</span><span class="p">}</span>
+
+<span class="n">boxplot_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s">'boxprops'</span><span class="p">:</span> <span class="n">boxprops</span><span class="p">,</span> <span class="s">'medianprops'</span><span class="p">:</span> <span class="n">lineprops</span><span class="p">,</span>
+                  <span class="s">'whiskerprops'</span><span class="p">:</span> <span class="n">lineprops</span><span class="p">,</span> <span class="s">'capprops'</span><span class="p">:</span> <span class="n">lineprops</span><span class="p">,</span>
+                  <span class="s">'width'</span><span class="p">:</span> <span class="mf">0.75</span><span class="p">,</span> <span class="s">'palette'</span><span class="p">:</span> <span class="n">face_pal</span><span class="p">,</span>
+                  <span class="s">'hue_order'</span><span class="p">:</span> <span class="n">hue_order</span><span class="p">}</span>
+
+<span class="n">stripplot_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s">'linewidth'</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span> <span class="s">'size'</span><span class="p">:</span> <span class="mi">6</span><span class="p">,</span> <span class="s">'alpha'</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>
+                    <span class="s">'palette'</span><span class="p">:</span> <span class="n">pal</span><span class="p">,</span> <span class="s">'hue_order'</span><span class="p">:</span> <span class="n">hue_order</span><span class="p">}</span>
+
+<span class="c1"># And we can plot just like last time
+</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'site'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'value'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s">'label'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">fliersize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">boxplot_kwargs</span><span class="p">)</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">stripplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'site'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'value'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s">'label'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">split</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">jitter</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="o">**</span><span class="n">stripplot_kwargs</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">.</span><span class="n">legend_</span><span class="p">.</span><span class="n">remove</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p><img src="/images/2018-03-09-boxplots-in-python_files/2018-03-09-boxplots-in-python_12_0.png" alt="png" /></p>
+
+<p>That looks pretty good (and is the version I ended up going with for my current manuscript), but what if you also want to change the line colors to match the hues? In this case, you need to go directly edit the artists after they’re drawn.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Plot, using all the same parameters as above
+</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'site'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'value'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s">'label'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">fliersize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">boxplot_kwargs</span><span class="p">)</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">stripplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'site'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'value'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s">'label'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">split</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">jitter</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="o">**</span><span class="n">stripplot_kwargs</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">.</span><span class="n">legend_</span><span class="p">.</span><span class="n">remove</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">artist</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ax</span><span class="p">.</span><span class="n">artists</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="n">dark_pink</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="n">dark_brown</span>
+
+    <span class="c1"># This sets the color for the main box
+</span>    <span class="n">artist</span><span class="p">.</span><span class="n">set_edgecolor</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+    <span class="c1"># Each box has 6 associated Line2D objects (to make the whiskers, fliers, etc.)
+</span>    <span class="c1"># Loop over them here, and use the same colour as above
+</span>    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">*</span><span class="mi">6</span><span class="p">,</span><span class="n">i</span><span class="o">*</span><span class="mi">6</span><span class="o">+</span><span class="mi">6</span><span class="p">):</span>
+        <span class="n">line</span> <span class="o">=</span> <span class="n">ax</span><span class="p">.</span><span class="n">lines</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+        <span class="n">line</span><span class="p">.</span><span class="n">set_color</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+        <span class="n">line</span><span class="p">.</span><span class="n">set_mfc</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+        <span class="n">line</span><span class="p">.</span><span class="n">set_mec</span><span class="p">(</span><span class="n">col</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p><img src="/images/2018-03-09-boxplots-in-python_files/2018-03-09-boxplots-in-python_14_0.png" alt="png" /></p>
+
+<h1 id="a-few-final-notes">A few final notes…</h1>
+
+<p>So far, I’ve been removing the legend because of the annoying double-legend issue when you call both <code class="language-plaintext highlighter-rouge">sns.boxplot</code> and <code class="language-plaintext highlighter-rouge">sns.stripplot</code>. I haven’t found a great way to get around this except the very manual way of going in afterwards and keeping only the first half of the legend:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Plot, using all the same parameters as above
+</span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="p">.</span><span class="n">subplots</span><span class="p">()</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'site'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'value'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s">'label'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">fliersize</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">boxplot_kwargs</span><span class="p">)</span>
+<span class="n">sns</span><span class="p">.</span><span class="n">stripplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s">'site'</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s">'value'</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s">'label'</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+    <span class="n">split</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">jitter</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="o">**</span><span class="n">stripplot_kwargs</span><span class="p">)</span>
+
+<span class="c1"># Fix the legend, keep only the first two legend elements
+</span><span class="n">handles</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">ax</span><span class="p">.</span><span class="n">get_legend_handles_labels</span><span class="p">()</span>
+<span class="n">lgd</span> <span class="o">=</span> <span class="n">ax</span><span class="p">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="n">labels</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span>
+               <span class="n">loc</span><span class="o">=</span><span class="s">'upper left'</span><span class="p">,</span>
+               <span class="n">fontsize</span><span class="o">=</span><span class="s">'large'</span><span class="p">,</span>
+               <span class="n">handletextpad</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">lgd</span><span class="p">.</span><span class="n">legendHandles</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="n">_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">40</span><span class="p">]</span>
+<span class="n">lgd</span><span class="p">.</span><span class="n">legendHandles</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="n">_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="mi">40</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p><img src="/images/2018-03-09-boxplots-in-python_files/2018-03-09-boxplots-in-python_16_0.png" alt="png" /></p>
+
+<p>Also a note that you can change the width of the boxplot with the <code class="language-plaintext highlighter-rouge">width</code> parameter in the call to <code class="language-plaintext highlighter-rouge">sns.boxplot</code>. However, this doesn’t change the width of each individual box, but rather the total width of each pair of boxes (or however many hues you have). So in the case where the data spans a similar range and the boxes are right next to each other (like in site 1, above), sometimes the box lines overlap slightly. If they’re not black, then you can see this if you look closely. I haven’t figured out a good way to fix this (and <a href="https://github.com/mwaskom/seaborn/issues/1076">it seems like</a> maybe there might not be one).</p>
+
+<p>And, finally, in this post I didn’t go through and pretty up the axes labels but that’s also something you need to do to make a figure publication-worthy. Add some capital letters, replace underscores with spaces, and make all font sizes quite large.</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="http://127.0.0.1:4000/tags/#coding" class="page__taxonomy-item" rel="tag">coding</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://127.0.0.1:4000/tags/#plotting" class="page__taxonomy-item" rel="tag">plotting</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://127.0.0.1:4000/tags/#portfolio" class="page__taxonomy-item" rel="tag">portfolio</a><span class="sep">, </span>
+    
+      
+      
+      <a href="http://127.0.0.1:4000/tags/#python" class="page__taxonomy-item" rel="tag">python</a>
+    
+    </span>
+  </p>
+
+
+
+
+      </footer>
+
+      
+
+<section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=http://127.0.0.1:4000/posts/2018/03/boxplots-in-python" class="btn btn--twitter" title="Share on Twitter"><i class="fab fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http://127.0.0.1:4000/posts/2018/03/boxplots-in-python" class="btn btn--facebook" title="Share on Facebook"><i class="fab fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://127.0.0.1:4000/posts/2018/03/boxplots-in-python" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fab fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+      
+
+
+  <nav class="pagination">
+    
+      <a href="http://127.0.0.1:4000/posts/2012/08/blog-post-4/" class="pagination--pager" title="Blog Post number 4
+">Previous</a>
+    
+    
+      <a href="http://127.0.0.1:4000/posts/2020/12/blog-post-1/" class="pagination--pager" title="My test post
+">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      
+        <h4 class="page__related-title">You May Also Enjoy</h4>
+      
+      <div class="grid__wrapper">
+        
+          
+
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://127.0.0.1:4000/posts/2021-01-11-22" rel="permalink">Gaussian and Summary stats
+</a>
+      
+    </h2>
+    
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  less than 1 minute read
+	
+</p>
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2021-01-11T00:00:00+00:00">January 11, 2021</time></p>
+        
+
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">gaussian</span><span class="sep"> </span>
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">statistical distribution</span><span class="sep"> </span>
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">stats</span>
+    
+    </span>
+  </p>
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>Many of the data observed in the world follows a pattern called as Gaussian/Normal distribution. Since a lot of properties for the Gaussian distributions is known, these properties and certain statistical methods can be used to derive insights for any gaussian data.</p>
+
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+        
+          
+
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://127.0.0.1:4000/posts/2020-12-17-1" rel="permalink">Testing vim configs for blog posts
+</a>
+      
+    </h2>
+    
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  less than 1 minute read
+	
+</p>
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2020-12-17T00:00:00+00:00">December 17, 2020</time></p>
+        
+
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">lmao mm dlm la mdlsa ml</span><span class="sep"> </span>
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">tag1</span>
+    
+    </span>
+  </p>
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><h1 id="welcome-to-a-new-post">Welcome to a new post</h1>
+<h2 id="today-we-will-discuss-about-cnn">Today we will discuss about CNN</h2>
+
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+        
+          
+
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://127.0.0.1:4000/posts/2020/12/blog-post-1/" rel="permalink">My test post
+</a>
+      
+    </h2>
+    
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  less than 1 minute read
+	
+</p>
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2020-12-11T00:00:00+00:00">December 11, 2020</time></p>
+        
+
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">category1</span><span class="sep"> </span>
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">category2</span><span class="sep"> </span>
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">cool posts</span>
+    
+    </span>
+  </p>
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>This is a sample blog post. Lorem ipsum I can’t remember the rest of lorem ipsum and don’t have an internet connection right now. Testing testing testing this blog post. Blog posts are cool.</p>
+
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+        
+          
+
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="http://127.0.0.1:4000/posts/2012/08/blog-post-4/" rel="permalink">Blog Post number 4
+</a>
+      
+    </h2>
+    
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  less than 1 minute read
+	
+</p>
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2015-08-14T00:00:00+00:00">August 14, 2015</time></p>
+        
+
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">category1</span><span class="sep"> </span>
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">category2</span><span class="sep"> </span>
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">cool posts</span>
+    
+    </span>
+  </p>
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>This is a sample blog post. Lorem ipsum I can’t remember the rest of lorem ipsum and don’t have an internet connection right now. Testing testing testing this blog post. Blog posts are cool.</p>
+
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+<a href="/sitemap/">Sitemap</a>
+<!-- end custom footer snippets -->
+
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/b1ackshadow"><i class="fab fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    <li><a href="http://127.0.0.1:4000/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2021 DC. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/academicpages/academicpages.github.io">AcademicPages</a>, a fork of <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    <script src="http://127.0.0.1:4000/assets/js/main.min.js"></script>
+
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', '', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+  </body>
+</html>
+
