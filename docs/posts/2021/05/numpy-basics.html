@@ -1,0 +1,948 @@
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+
+<meta charset="utf-8" />
+
+
+
+<!-- begin SEO -->
+
+
+
+
+
+
+
+
+
+<title>Numpy basics for Data Science - blackshadow</title>
+
+
+
+
+
+
+
+<meta property="og:locale" content="en-US">
+<meta property="og:site_name" content="blackshadow">
+<meta property="og:title" content="Numpy basics for Data Science">
+
+
+  <link rel="canonical" href="https://b1ackshadow.github.io/posts/2021/05/numpy-basics">
+  <meta property="og:url" content="https://b1ackshadow.github.io/posts/2021/05/numpy-basics">
+
+
+
+  <meta property="og:description" content="NumPy is short for numerical python. As the name dictates, it is used for numerical computing like linear algebra, statistical computations .">
+
+
+
+
+
+
+
+
+
+  <meta property="og:type" content="article">
+  <meta property="article:published_time" content="2021-05-03T00:00:00+00:00">
+
+
+
+
+
+
+
+
+  <script type="application/ld+json">
+    {
+      "@context" : "http://schema.org",
+      "@type" : "Person",
+      "name" : "DC",
+      "url" : "https://b1ackshadow.github.io",
+      "sameAs" : null
+    }
+  </script>
+
+
+
+
+
+
+<!-- end SEO -->
+
+
+<link
+  href="https://b1ackshadow.github.io/feed.xml"
+  type="application/atom+xml"
+  rel="alternate"
+  title="blackshadow Feed"
+/>
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True" />
+<meta name="MobileOptimized" content="320" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<script>
+  document.documentElement.className =
+    document.documentElement.className.replace(/\bno-js\b/g, "") + " js ";
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://b1ackshadow.github.io/assets/css/main.css" />
+<link rel="stylesheet" href="https://b1ackshadow.github.io/assets/css/custom.css" />
+<link rel="stylesheet" href="https://b1ackshadow.github.io/assets/css/python-syntax.css" />
+
+<meta http-equiv="cleartype" content="on" />
+
+    
+
+<!-- start custom head snippets -->
+
+<link rel="apple-touch-icon" sizes="57x57" href="https://b1ackshadow.github.io/images/apple-touch-icon-57x57.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="60x60" href="https://b1ackshadow.github.io/images/apple-touch-icon-60x60.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="72x72" href="https://b1ackshadow.github.io/images/apple-touch-icon-72x72.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="76x76" href="https://b1ackshadow.github.io/images/apple-touch-icon-76x76.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="114x114" href="https://b1ackshadow.github.io/images/apple-touch-icon-114x114.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="120x120" href="https://b1ackshadow.github.io/images/apple-touch-icon-120x120.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="144x144" href="https://b1ackshadow.github.io/images/apple-touch-icon-144x144.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="152x152" href="https://b1ackshadow.github.io/images/apple-touch-icon-152x152.png?v=M44lzPylqQ">
+<link rel="apple-touch-icon" sizes="180x180" href="https://b1ackshadow.github.io/images/apple-touch-icon-180x180.png?v=M44lzPylqQ">
+<link rel="icon" type="image/png" href="https://b1ackshadow.github.io/images/favicon-32x32.png?v=M44lzPylqQ" sizes="32x32">
+<link rel="icon" type="image/png" href="https://b1ackshadow.github.io/images/android-chrome-192x192.png?v=M44lzPylqQ" sizes="192x192">
+<link rel="icon" type="image/png" href="https://b1ackshadow.github.io/images/favicon-96x96.png?v=M44lzPylqQ" sizes="96x96">
+<link rel="icon" type="image/png" href="https://b1ackshadow.github.io/images/favicon-16x16.png?v=M44lzPylqQ" sizes="16x16">
+<link rel="manifest" href="https://b1ackshadow.github.io/images/manifest.json?v=M44lzPylqQ">
+<link rel="mask-icon" href="https://b1ackshadow.github.io/images/safari-pinned-tab.svg?v=M44lzPylqQ" color="#000000">
+<link rel="shortcut icon" href="/images/favicon.ico?v=M44lzPylqQ">
+<meta name="msapplication-TileColor" content="#000000">
+<meta name="msapplication-TileImage" content="https://b1ackshadow.github.io/images/mstile-144x144.png?v=M44lzPylqQ">
+<meta name="msapplication-config" content="https://b1ackshadow.github.io/images/browserconfig.xml?v=M44lzPylqQ">
+<meta name="theme-color" content="#ffffff">
+<link rel="stylesheet" href="https://b1ackshadow.github.io/assets/css/academicons.css"/>
+
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({ TeX: { equationNumbers: { autoNumber: "all" } } }); </script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+    }
+  });
+</script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/latest.js?config=TeX-MML-AM_CHTML' async></script>
+
+<!-- end custom head snippets -->
+
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <!--[if lt IE 9]>
+<div class="notice--danger align-center" style="margin: 0;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</div>
+<![endif]-->
+    
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <button><div class="navicon"></div></button>
+        <ul class="visible-links">
+          <li class="masthead__menu-item masthead__menu-item--lg"><a href="https://b1ackshadow.github.io/">blackshadow</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="https://b1ackshadow.github.io/portfolio/">Portfolio</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="https://b1ackshadow.github.io/year-archive/">Blog Posts</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="https://b1ackshadow.github.io/cv/">CV</a></li>
+          
+            
+            <li class="masthead__menu-item"><a href="https://b1ackshadow.github.io/markdown/">Guide</a></li>
+          
+        </ul>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+    
+
+
+
+
+
+<div id="main" role="main">
+  
+
+
+  <div class="sidebar sticky">
+  
+
+
+
+<div itemscope itemtype="http://schema.org/Person">
+
+  <div class="author__avatar">
+    
+    	<img src="https://b1ackshadow.github.io/images/mew.png" class="author__avatar" alt="">
+    
+  </div>
+
+  <div class="author__content">
+    <h3 class="author__name"></h3>
+    <p class="author__bio">A bit about me 1</p>
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+        <li><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> Your mom's attic</li>
+      
+      
+      
+      
+        <li><a href="mailto:actuallydc@gmail.com"><i class="fas fa-fw fa-envelope" aria-hidden="true"></i> Email</a></li>
+      
+      
+       
+      
+      
+      
+      
+      
+      
+      
+      
+      
+        <li><a href="https://github.com/b1ackshadow"><i class="fab fa-fw fa-github" aria-hidden="true"></i> Github</a></li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+    </ul>
+  </div>
+</div>
+
+  
+  </div>
+
+
+  <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
+	  <meta itemprop="headline" content="Numpy basics for Data Science">
+    <meta itemprop="description" content="NumPy is short for numerical python. As the name dictates, it is used for numerical computing like linear algebra, statistical computations .">
+    <meta itemprop="datePublished" content="May 03, 2021">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 class="page__title" itemprop="headline">Numpy basics for Data Science
+</h1>
+          
+            <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  5 minute read
+	
+</p>
+          
+        
+        
+        
+          <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2021-05-03T00:00:00+00:00">May 03, 2021</time></p>
+        
+        
+             
+        
+    
+        </header>
+      
+
+      <section class="page__content" itemprop="text">
+        <p>NumPy is short for numerical python. As the name dictates, it is used for numerical computing like linear algebra, statistical computations .</p>
+
+<p>Most notable features of numpy:-</p>
+
+<ul>
+  <li>ndarray - supports efficient multidimensional array for fast parallelised arithmetic operations (vectorized SIMD operations <a href="https://towardsdatascience.com/decoding-the-performance-secret-of-worlds-most-popular-data-science-library-numpy-7a7da54b7d72/">[1]</a> )</li>
+  <li>No loop - you can directly operate on the array without having to use python loops</li>
+  <li>r/w files - supports directly saving arrays into disk and memory-mapped files(virtual memory space)</li>
+  <li>maths - Linear algebra, statistical methods, Fourier transform etc</li>
+  <li>C api - Numpy is built on C, C++ and FORTRAN . You can interact with such libs.</li>
+</ul>
+
+<p>You can learn more about numpy by heading over to <a href="https://numpy.org/doc/stable/user/whatisnumpy.html">numpy docs</a></p>
+
+<h3 id="things-we-are-going-to-learn">Things we are going to learn:</h3>
+
+<ul>
+  <li>Fast vectorized array operations like cleaning, munging, filtering, transformations etc</li>
+  <li>sorting, unique and set operations</li>
+  <li>descriptive stats, summarizing data</li>
+  <li>merging and joining datasets</li>
+  <li>conditional logic as array exp</li>
+  <li>Group-wise data manipulation</li>
+</ul>
+
+<p>Just to give you a taste of why you would choose numpy over python sequences for array based operations, you can refer the below ipython test:</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># Note we are not including these inside the time block 
+#because we want to test the speed of the operation not the data initialization
+</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="n">np</span>
+
+<span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">100000</span><span class="p">)</span>
+
+<span class="n">lst</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">100000</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">%%</span><span class="n">timeit</span> <span class="o">-</span><span class="n">n10</span>
+    
+<span class="n">result</span> <span class="o">=</span> <span class="n">arr</span> <span class="o">*</span> <span class="mi">2</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The slowest run took 36.60 times longer than the fastest. This could mean that an intermediate result is being cached.
+706 µs ± 1.36 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">%%</span><span class="n">timeit</span> <span class="o">-</span><span class="n">n10</span>
+    
+<span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">each</span> <span class="o">*</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">each</span> <span class="ow">in</span> <span class="n">lst</span><span class="p">]</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>5.34 ms ± 781 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)
+</code></pre></div></div>
+
+<p>To put it into perspective,</p>
+
+<p>1 millisecond is equal to 1000 microsecond.</p>
+
+<p>So python 5000 » numpy 178 microseconds</p>
+
+<h2 id="11-numpy-ndarray">1.1 Numpy ndarray</h2>
+
+<p>Numpy homogeneous ndarray allows us to perform efficient array operations directly on the whole block of array as opposed to loops as if the array is just a scalar element(like in pure python)</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">data_np</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">data_py</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="c1">#python list operation
+</span><span class="n">squares_py</span> <span class="o">=</span> <span class="p">[</span> <span class="n">e</span> <span class="o">**</span> <span class="mi">2</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">data_py</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Python list operation:"</span><span class="p">,</span> <span class="n">squares_py</span><span class="p">)</span>
+
+<span class="c1">#numpy scalar looking array operation
+</span><span class="n">squares_np</span> <span class="o">=</span> <span class="n">data_np</span> <span class="o">**</span> <span class="mi">2</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Numpy array operation:"</span><span class="p">,</span><span class="n">squares_np</span><span class="p">)</span>
+
+<span class="c1"># similarly we can perform add, subtract, multiply and division etc.
+</span>
+<span class="c1">#print(data_np - 2)
+#print(data_np * 2)
+#print(data_np / 2)
+</span></code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Python list operation: [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
+Numpy array operation: [ 0  1  4  9 16 25 36 49 64 81]
+</code></pre></div></div>
+
+<p>Every numpy ndarray has attributes to check the dimension and the data type.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">random</span><span class="p">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">20</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Dimension/shape of the data:"</span><span class="p">,</span><span class="n">data</span><span class="p">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Datatype:"</span><span class="p">,</span><span class="n">data</span><span class="p">.</span><span class="n">dtype</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Dimension/shape of the data: (10, 20)
+Datatype: float64
+</code></pre></div></div>
+
+<p>I hope the above introduction was enough to get you excited about numpy. Now we will be going through basic numpy concepts one bye one.</p>
+
+<h3 id="creating-ndarrays">Creating ndarrays</h3>
+
+<p><code class="language-plaintext highlighter-rouge">array</code> function can be used to create an ndarray using any sequence(list, another array etc). This function returns a new array so you can use it to make copies of arrays as well.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">my_list</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">my_list</span><span class="p">)</span>
+
+<span class="n">my_arr</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">my_list</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">my_arr</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[1, 2, 3, 4, 5]
+[1 2 3 4 5]
+</code></pre></div></div>
+
+<p>Hmm. What if I have nested lists ?</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">my_list</span> <span class="o">=</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">)),</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">))]</span>
+<span class="k">print</span><span class="p">(</span><span class="n">my_list</span><span class="p">,</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+
+<span class="n">my_arr</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">(</span><span class="n">my_list</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">my_arr</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9], [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]] 
+
+[[0 1 2 3 4 5 6 7 8 9]
+ [0 1 2 3 4 5 6 7 8 9]]
+</code></pre></div></div>
+
+<p>Generally, when working with matrices, ndarrys, people tend to use common array initializations like identity matrix, all-ones matrix, zero matrix or just an empty array without any values. For these reasons, numpy provides us with some helper functions to achieve the same.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">)),</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">)),</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">empty</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[[1. 0. 0. 0.]
+ [0. 1. 0. 0.]
+ [0. 0. 1. 0.]
+ [0. 0. 0. 1.]] 
+
+[[1. 1.]
+ [1. 1.]
+ [1. 1.]
+ [1. 1.]] 
+
+[[0. 0.]
+ [0. 0.]
+ [0. 0.]
+ [0. 0.]] 
+
+[[1. 1.]
+ [1. 1.]] 
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># arange is similar to python range
+</span>
+<span class="k">print</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">10</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[0 1 2 3 4 5 6 7 8 9]
+</code></pre></div></div>
+
+<p>Numpy datatypes help it allocate memory and efficient work with it unlike python’s dynamic memory allocation. You can use “dtype” attribute to work with datatypes in numpy</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="n">arr</span><span class="p">.</span><span class="n">dtype</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="p">.</span><span class="n">int32</span><span class="p">).</span><span class="n">dtype</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>int64
+int32
+</code></pre></div></div>
+
+<p>You can covert numpy arrays from one datatype to another as long as they are compatible. If floating point numbers are converted to int, the decimal part is truncated. Also it’s worth to note that astype always returns a copy of the data even if type is unchanged.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="k">print</span><span class="p">(</span><span class="n">arr</span><span class="p">.</span><span class="n">dtype</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">arr</span><span class="p">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">int8</span><span class="p">).</span><span class="n">dtype</span><span class="p">)</span>
+
+<span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.1</span><span class="p">,</span><span class="mf">2.34</span><span class="p">,</span><span class="mf">3.14</span><span class="p">])</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">arr</span><span class="p">.</span><span class="n">dtype</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">arr</span><span class="p">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>int64
+int8
+float64
+[1 2 3]
+</code></pre></div></div>
+
+<p>You can covert array of string representing numbers to number dtype and vice verse using np.string_. However, since numpy works only with fixed sizes, it may truncate string input data.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([</span><span class="s">"1"</span><span class="p">,</span><span class="s">"2"</span><span class="p">,</span><span class="s">"3"</span><span class="p">],</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="p">.</span><span class="n">string_</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">arr</span><span class="p">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">))</span>
+
+<span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span><span class="p">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">arr</span><span class="p">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="p">.</span><span class="n">string_</span><span class="p">))</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[b'1' b'2' b'3']
+[1 2 3]
+[b'1' b'2' b'3']
+</code></pre></div></div>
+
+<h3 id="arithmetic-with-numpy-arrays">Arithmetic with numpy arrays</h3>
+
+<p>Without the ability to perform arithmetic operations, numpy would not be that useful. Any arithmetic operations between two equal sized arrays will yield elementwise operation. This involves batch operations on elements rather than using loops which is termed as <em>vectorization</em>.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">arr</span> <span class="o">=</span> <span class="n">np</span><span class="p">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]])</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">Addition:</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">arr</span> <span class="o">+</span> <span class="n">arr</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">Subtraction</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">arr</span> <span class="o">-</span> <span class="n">arr</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">Multiplication:</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">arr</span> <span class="o">*</span> <span class="n">arr</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">"</span><span class="se">\n</span><span class="s">Division:</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">arr</span> <span class="o">/</span> <span class="n">arr</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[[1 2 3]
+ [4 5 6]]
+
+Addition:
+ [[ 2  4  6]
+ [ 8 10 12]]
+
+Subtraction
+ [[0 0 0]
+ [0 0 0]]
+
+Multiplication:
+ [[ 1  4  9]
+ [16 25 36]]
+
+Division:
+ [[1. 1. 1.]
+ [1. 1. 1.]]
+</code></pre></div></div>
+
+<p>References:-</p>
+
+<p>[1] https://towardsdatascience.com/decoding-the-performance-secret-of-worlds-most-popular-data-science-library-numpy-7a7da54b7d72</p>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+
+  
+
+
+
+
+  
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <a href="https://b1ackshadow.github.io/tags/#linear-algebra" class="page__taxonomy-item" rel="tag">linear algebra</a><span class="sep">, </span>
+    
+      
+      
+      <a href="https://b1ackshadow.github.io/tags/#numerical-computing" class="page__taxonomy-item" rel="tag">numerical computing</a><span class="sep">, </span>
+    
+      
+      
+      <a href="https://b1ackshadow.github.io/tags/#numpy" class="page__taxonomy-item" rel="tag">numpy</a><span class="sep">, </span>
+    
+      
+      
+      <a href="https://b1ackshadow.github.io/tags/#python" class="page__taxonomy-item" rel="tag">python</a>
+    
+    </span>
+  </p>
+
+
+
+
+      </footer>
+
+      
+
+<section class="page__share">
+  
+    <h4 class="page__share-title">Share on</h4>
+  
+
+  <a href="https://twitter.com/intent/tweet?text=https://b1ackshadow.github.io/posts/2021/05/numpy-basics" class="btn btn--twitter" title="Share on Twitter"><i class="fab fa-twitter" aria-hidden="true"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https://b1ackshadow.github.io/posts/2021/05/numpy-basics" class="btn btn--facebook" title="Share on Facebook"><i class="fab fa-facebook" aria-hidden="true"></i><span> Facebook</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://b1ackshadow.github.io/posts/2021/05/numpy-basics" class="btn btn--linkedin" title="Share on LinkedIn"><i class="fab fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span></a>
+</section>
+
+      
+
+
+  <nav class="pagination">
+    
+      <a href="https://b1ackshadow.github.io/posts/2021-01-11-22" class="pagination--pager" title="Gaussian and Summary stats
+">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    <div class="page__related">
+      
+        <h4 class="page__related-title">You May Also Enjoy</h4>
+      
+      <div class="grid__wrapper">
+        
+          
+
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="https://b1ackshadow.github.io/posts/2021-01-11-22" rel="permalink">Gaussian and Summary stats
+</a>
+      
+    </h2>
+    
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  less than 1 minute read
+	
+</p>
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2021-01-11T00:00:00+00:00">January 11, 2021</time></p>
+        
+
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">gaussian</span><span class="sep"> </span>
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">statistical distribution</span><span class="sep"> </span>
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">stats</span>
+    
+    </span>
+  </p>
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>Many of the data observed in the world follows a pattern called as Gaussian/Normal distribution. Since a lot of properties for the Gaussian distributions is known, these properties and certain statistical methods can be used to derive insights for any gaussian data.</p>
+
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+        
+          
+
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="https://b1ackshadow.github.io/posts/2020-12-17-1" rel="permalink">Testing vim configs for blog posts
+</a>
+      
+    </h2>
+    
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  less than 1 minute read
+	
+</p>
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2020-12-17T00:00:00+00:00">December 17, 2020</time></p>
+        
+
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">lmao mm dlm la mdlsa ml</span><span class="sep"> </span>
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">tag1</span>
+    
+    </span>
+  </p>
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><h1 id="welcome-to-a-new-post">Welcome to a new post</h1>
+<h2 id="today-we-will-discuss-about-cnn">Today we will discuss about CNN</h2>
+
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+        
+          
+
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="https://b1ackshadow.github.io/posts/2020/12/blog-post-1/" rel="permalink">My test post
+</a>
+      
+    </h2>
+    
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  less than 1 minute read
+	
+</p>
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2020-12-11T00:00:00+00:00">December 11, 2020</time></p>
+        
+
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">category1</span><span class="sep"> </span>
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">category2</span><span class="sep"> </span>
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">cool posts</span>
+    
+    </span>
+  </p>
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>This is a sample blog post. Lorem ipsum I can’t remember the rest of lorem ipsum and don’t have an internet connection right now. Testing testing testing this blog post. Blog posts are cool.</p>
+
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+        
+          
+
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="http://schema.org/CreativeWork">
+    
+
+    <h2 class="archive__item-title" itemprop="headline">
+      
+        <a href="https://b1ackshadow.github.io/posts/2018/03/boxplots-in-python" rel="permalink">Boxplots in python
+</a>
+      
+    </h2>
+    
+    
+      <p class="page__meta"><i class="fa fa-clock-o" aria-hidden="true"></i> 
+
+
+  
+	  8 minute read
+	
+</p>
+    
+
+        
+         <p class="page__date"><strong><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Published:</strong> <time datetime="2018-03-08T00:00:00+00:00">March 08, 2018</time></p>
+        
+
+  
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fa fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">coding</span><span class="sep"> </span>
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">plotting</span><span class="sep"> </span>
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">portfolio</span><span class="sep"> </span>
+    
+      
+      
+      <span class="page__taxonomy-item" rel="tag">python</span>
+    
+    </span>
+  </p>
+
+    
+    <p class="archive__item-excerpt" itemprop="description"><p>To celebrate figuring out <a href="/posts/2018/03/ipython-notebooks-jekyll">how to blog with jupyter notebooks</a>, I’m going to go through some tricks I’ve learned to plot pretty boxplots in Python.</p>
+
+</p>
+    
+    
+    
+
+  </article>
+</div>
+
+        
+      </div>
+    </div>
+  
+</div>
+
+
+    <div class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+<a href="/sitemap/">Sitemap</a>
+<!-- end custom footer snippets -->
+
+        
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+    
+    
+    
+      <li><a href="http://github.com/b1ackshadow"><i class="fab fa-github" aria-hidden="true"></i> GitHub</a></li>
+    
+    
+    <li><a href="https://b1ackshadow.github.io/feed.xml"><i class="fa fa-fw fa-rss-square" aria-hidden="true"></i> Feed</a></li>
+  </ul>
+</div>
+
+<div class="page__footer-copyright">&copy; 2021 DC. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://github.com/academicpages/academicpages.github.io">AcademicPages</a>, a fork of <a href="https://mademistakes.com/work/minimal-mistakes-jekyll-theme/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    <script src="https://b1ackshadow.github.io/assets/js/main.min.js"></script>
+
+
+
+
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', '', 'auto');
+  ga('send', 'pageview');
+</script>
+
+
+
+
+
+
+  </body>
+</html>
+
